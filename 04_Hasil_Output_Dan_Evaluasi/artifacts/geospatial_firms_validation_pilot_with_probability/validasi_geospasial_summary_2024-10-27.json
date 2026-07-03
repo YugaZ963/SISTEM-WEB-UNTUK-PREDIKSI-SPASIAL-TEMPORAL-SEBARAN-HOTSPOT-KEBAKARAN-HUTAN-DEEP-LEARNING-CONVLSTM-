@@ -1,0 +1,39 @@
+{
+  "created_at_utc": "2026-06-16T05:01:21.414118+00:00",
+  "firms_csv": "data-firms-mentah-pendamping\\modis_2024-10-27_cakupan_peta_project.csv",
+  "target_date": "2024-10-27",
+  "target_image": "Ipynb\\Dataset History Fire Hotspot In Riau Province PNG\\FIRMS_2024-10-27[@102.1,0.8,8.1z].png",
+  "admin_geojson": null,
+  "probability_npy": "artifacts\\geospatial_firms_validation_pilot\\dummy_probability_from_png_redmask_2024-10-27.npy",
+  "threshold": 0.55,
+  "km_per_pixel": 0.570491,
+  "max_search_radius_px": 9,
+  "total_firms_rows": 81,
+  "detail_rows_written": 81,
+  "points_inside_image": 81,
+  "points_outside_image": 0,
+  "admin_features_loaded": 0,
+  "prediction_used": true,
+  "prediction_positive_pixels": 7376,
+  "prediction_positive_ratio": 0.00624479,
+  "distance_summary": {
+    "1": {
+      "radius_km": 1.0,
+      "matched_points": 81,
+      "evaluated_points": 81,
+      "hit_rate": 1.0
+    },
+    "3": {
+      "radius_km": 3.0,
+      "matched_points": 81,
+      "evaluated_points": 81,
+      "hit_rate": 1.0
+    },
+    "5": {
+      "radius_km": 5.0,
+      "matched_points": 81,
+      "evaluated_points": 81,
+      "hit_rate": 1.0
+    }
+  }
+}

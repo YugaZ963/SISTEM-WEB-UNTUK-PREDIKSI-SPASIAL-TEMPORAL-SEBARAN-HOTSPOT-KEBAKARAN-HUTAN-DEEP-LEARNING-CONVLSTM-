@@ -1,0 +1,21 @@
+﻿{
+  "python.defaultInterpreterPath": "C:\\laragon\\www\\sistem-web-skripsi-ta\\.venv\\Scripts\\python.exe",
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}\\02_Project_Web_Demo"
+  ],
+  "terminal.integrated.defaultProfile.windows": "PowerShell - Auto .venv Skripsi",
+  "terminal.integrated.cwd": "C:\\laragon\\www\\sistem-web-skripsi-ta - 2\\02_Project_Web_Demo",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell - Auto .venv Skripsi": {
+      "source": "PowerShell",
+      "args": [
+        "-NoExit",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& 'C:\\laragon\\www\\sistem-web-skripsi-ta\\.venv\\Scripts\\Activate.ps1'; Set-Location -LiteralPath 'C:\\laragon\\www\\sistem-web-skripsi-ta - 2\\02_Project_Web_Demo'"
+      ]
+    }
+  }
+}

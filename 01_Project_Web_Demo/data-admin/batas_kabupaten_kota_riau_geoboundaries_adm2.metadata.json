@@ -1,0 +1,26 @@
+{
+  "source_file": "data-admin\\geoBoundaries-IDN-ADM2_simplified.geojson",
+  "source_name": "geoBoundaries IDN ADM2 simplified",
+  "source_api": "https://www.geoboundaries.org/api/current/gbOpen/IDN/ADM2/",
+  "source_download": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/IDN/ADM2/geoBoundaries-IDN-ADM2_simplified.geojson",
+  "boundary_source": "Badan Pusat Statistik (BPS - Statistics Indonesia), World Food Programme, OCHA ROAP",
+  "license": "Creative Commons Attribution 3.0 Intergovernmental Organisations (CC BY 3.0 IGO)",
+  "admin_level": "ADM2 kabupaten/kota",
+  "filtered_province": "Riau",
+  "feature_count": 12,
+  "kabupaten_kota": [
+    "Bengkalis",
+    "Indragiri Hilir",
+    "Indragiri Hulu",
+    "Kampar",
+    "Kepulauan Meranti",
+    "Kota Dumai",
+    "Kota Pekanbaru",
+    "Kuantan Singingi",
+    "Pelalawan",
+    "Rokan Hilir",
+    "Rokan Hulu",
+    "Siak"
+  ],
+  "limitation": "Versi simplified dipakai agar ringan. Untuk analisis presisi di dekat batas wilayah, gunakan boundary resmi/full-resolution jika tersedia."
+}

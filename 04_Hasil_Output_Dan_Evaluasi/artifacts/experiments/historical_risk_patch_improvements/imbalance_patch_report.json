@@ -1,0 +1,48 @@
+{
+  "mode": "imbalance",
+  "split": "train",
+  "sample_count": 120,
+  "dataset_frame_count": 1060,
+  "train_samples": 737,
+  "val_samples": 158,
+  "test_samples": 158,
+  "positive_pixels": 156935,
+  "negative_pixels": 141580345,
+  "total_pixels": 141737280,
+  "positive_ratio": 0.0011072245777539967,
+  "raw_positive_class_weight": 902.1591423200688,
+  "capped_positive_class_weight": 50.0,
+  "recommended_framing": "prediksi area risiko hotspot, bukan prediksi titik hotspot presisi tinggi",
+  "patch_summary": {
+    "160": {
+      "positive_patch_count": 426,
+      "negative_patch_count": 120,
+      "mean_positive_patch_positive_ratio": 0.024920316167840375,
+      "median_positive_patch_positive_ratio": 0.01744140625,
+      "mean_negative_patch_positive_ratio": 0.0008167317708333335
+    },
+    "224": {
+      "positive_patch_count": 426,
+      "negative_patch_count": 120,
+      "mean_positive_patch_positive_ratio": 0.015434730780516432,
+      "median_positive_patch_positive_ratio": 0.009546396683673469,
+      "mean_negative_patch_positive_ratio": 0.0007741084715136054
+    },
+    "256": {
+      "positive_patch_count": 426,
+      "negative_patch_count": 120,
+      "mean_positive_patch_positive_ratio": 0.012617908173323797,
+      "median_positive_patch_positive_ratio": 0.0084381103515625,
+      "mean_negative_patch_positive_ratio": 0.0007311503092447916
+    }
+  },
+  "practical_recommendation": {
+    "increase_positive_patch_sampling": "coba 6:1 atau 8:1 untuk train-positive-patches:train-negative-patches",
+    "larger_patch_candidates": [
+      160,
+      224,
+      256
+    ],
+    "use_feature_stack": "mask_context3 untuk konteks tambahan yang sudah tersedia di script training utama"
+  }
+}

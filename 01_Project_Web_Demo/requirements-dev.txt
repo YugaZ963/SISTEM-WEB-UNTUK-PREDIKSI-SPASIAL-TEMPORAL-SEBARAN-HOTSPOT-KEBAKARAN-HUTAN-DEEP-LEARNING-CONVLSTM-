@@ -1,0 +1,8 @@
+# Dependency development mewarisi dependency web utama.
+-r requirements.txt
+
+# Pytest dipakai untuk menjalankan test otomatis alur API prediksi.
+pytest>=8.3.0
+
+# HTTPX dipakai oleh TestClient/FastAPI untuk menguji endpoint secara lokal.
+httpx>=0.27.0

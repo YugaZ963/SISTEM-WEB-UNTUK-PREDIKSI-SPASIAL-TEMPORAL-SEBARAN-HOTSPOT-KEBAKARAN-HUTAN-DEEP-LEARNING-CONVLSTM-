@@ -1,0 +1,17 @@
+{
+  "created_at_utc": "2026-06-16T06:02:47.489813+00:00",
+  "firms_csv": "data-firms-mentah-pendamping\\modis_sp_2025-06-21_2025-11-25_cakupan_peta_project.csv",
+  "target_date": null,
+  "target_image": null,
+  "admin_geojson": "data-admin\\batas_kabupaten_kota_riau_geoboundaries_adm2.geojson",
+  "probability_npy": null,
+  "threshold": 0.55,
+  "km_per_pixel": 0.570491,
+  "max_search_radius_px": 9,
+  "total_firms_rows": 1961,
+  "detail_rows_written": 1961,
+  "points_inside_image": 1961,
+  "points_outside_image": 0,
+  "admin_features_loaded": 12,
+  "prediction_used": false
+}

@@ -1,0 +1,866 @@
+
+/* Komentar file skripsi:
+   Style dashboard sistem web prediksi hotspot: layout, kartu metrik, form upload, hasil prediksi, dan riwayat.
+   Konteks laporan: mendukung deployment sistem web pada BAB IV.
+*/
+
+/* Variabel warna dan radius utama dashboard didefinisikan di root agar konsisten. */
+:root {
+  --bg: #eef2f1;
+  --surface: #ffffff;
+  --surface-alt: #f7f8f3;
+  --ink: #18312a;
+  --muted: #5f716b;
+  --line: rgba(24, 49, 42, 0.12);
+  --line-strong: rgba(24, 49, 42, 0.2);
+  --brand: #1f6f5f;
+  --brand-strong: #0f4f42;
+  --accent: #d96a2b;
+  --accent-soft: #fff1e7;
+  --success: #157347;
+  --warning: #b96a09;
+  --danger: #b02a37;
+  --shadow: 0 20px 40px rgba(24, 49, 42, 0.08);
+  --radius-lg: 26px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+}
+
+/* Body dashboard diberi latar dan warna teks utama aplikasi prediksi hotspot. */
+body.dashboard-body {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background:
+    radial-gradient(circle at top left, rgba(217, 106, 43, 0.14), transparent 24%),
+    radial-gradient(circle at top right, rgba(31, 111, 95, 0.12), transparent 28%),
+    linear-gradient(180deg, #f8f4ea 0%, var(--bg) 36%, #f1f4f3 100%);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* Container utama dibatasi lebarnya agar dashboard tetap nyaman dibaca di layar besar. */
+.dashboard-shell {
+  /* Batas lebar menjaga layout tetap nyaman di layar besar. */
+  max-width: 1560px;
+}
+
+.hero-panel,
+/* Card dashboard menjadi wadah form, runtime, statistik, hasil, dan riwayat. */
+.dashboard-card {
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 1px solid var(--line);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: var(--radius-lg);
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(255, 255, 255, 0.92);
+  /* Shadow memberi kedalaman ringan pada card utama. */
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+/* Panel pembuka menonjolkan tujuan sistem dan konfigurasi model aktif. */
+.hero-panel {
+  /* Overflow mengontrol konten panjang seperti tabel riwayat atau legenda. */
+  overflow: hidden;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 1.75rem;
+  position: relative;
+}
+
+/* Selector `.hero-panel::before` mengatur bagian spesifik dari dashboard prediksi. */
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background:
+    linear-gradient(135deg, rgba(31, 111, 95, 0.08), transparent 36%),
+    linear-gradient(315deg, rgba(217, 106, 43, 0.08), transparent 42%);
+  pointer-events: none;
+}
+
+/* Selector `.hero-panel > .row` mengatur bagian spesifik dari dashboard prediksi. */
+.hero-panel > .row {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow,
+/* Selector `.section-label` mengatur bagian spesifik dari dashboard prediksi. */
+.section-label {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--brand-strong);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.76rem;
+  /* Ketebalan font menonjolkan label, angka statistik, atau judul. */
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Judul utama dibuat kuat agar topik ConvLSTM dan hotspot langsung terbaca. */
+.hero-title {
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  line-height: 1.05;
+  /* Margin mengatur jarak luar antar bagian dashboard. */
+  margin: 0.45rem 0 0.85rem;
+  /* Batas lebar menjaga layout tetap nyaman di layar besar. */
+  max-width: 14ch;
+}
+
+/* Teks pengantar menjelaskan alur H-6 sampai H0 menuju H+1. */
+.hero-lead {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 1rem;
+  line-height: 1.7;
+  /* Batas lebar menjaga layout tetap nyaman di layar besar. */
+  max-width: 72ch;
+}
+
+/* Selector `.hero-chip-row` mengatur bagian spesifik dari dashboard prediksi. */
+.hero-chip-row {
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: flex;
+  flex-wrap: wrap;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 0.7rem;
+}
+
+/* Chip menampilkan konfigurasi kecil seperti model, threshold, dan batas file. */
+.hero-chip {
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 1px solid rgba(31, 111, 95, 0.14);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: 999px;
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(255, 255, 255, 0.88);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--ink);
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: inline-flex;
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.9rem;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 0.35rem;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 0.72rem 1rem;
+}
+
+/* Selector `.runtime-hero-card` mengatur bagian spesifik dari dashboard prediksi. */
+.runtime-hero-card {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background:
+    linear-gradient(180deg, rgba(15, 79, 66, 0.98), rgba(31, 111, 95, 0.96));
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 0;
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: #f6fbf8;
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: flex;
+  flex-direction: column;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 1rem;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 1.4rem;
+}
+
+/* Selector `.runtime-hero-card .section-label` mengatur bagian spesifik dari dashboard prediksi. */
+.runtime-hero-card .section-label {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Badge status memberi sinyal cepat apakah runtime berhasil, fallback, atau gagal. */
+.status-badge {
+  align-self: flex-start;
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: 999px;
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: inline-flex;
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.85rem;
+  /* Ketebalan font menonjolkan label, angka statistik, atau judul. */
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 0.55rem 0.95rem;
+}
+
+/* Selector `.status-success` mengatur bagian spesifik dari dashboard prediksi. */
+.status-success {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(255, 255, 255, 0.14);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: #ffffff;
+}
+
+/* Selector `.status-warning` mengatur bagian spesifik dari dashboard prediksi. */
+.status-warning {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(255, 204, 102, 0.18);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: #ffe0ad;
+}
+
+/* Selector `.status-danger` mengatur bagian spesifik dari dashboard prediksi. */
+.status-danger {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(255, 130, 130, 0.18);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: #ffd1d1;
+}
+
+/* Selector `.status-pending` mengatur bagian spesifik dari dashboard prediksi. */
+.status-pending {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(255, 255, 255, 0.14);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: rgba(255, 255, 255, 0.84);
+}
+
+/* Selector `.status-copy` mengatur bagian spesifik dari dashboard prediksi. */
+.status-copy {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.7;
+}
+
+/* Selector `.stats-grid` mengatur bagian spesifik dari dashboard prediksi. */
+.stats-grid {
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: grid;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 1rem;
+  /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Selector `.metric-card` mengatur bagian spesifik dari dashboard prediksi. */
+.metric-card {
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 1.25rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Selector `.metric-label` mengatur bagian spesifik dari dashboard prediksi. */
+.metric-label {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.65rem;
+  text-transform: uppercase;
+}
+
+/* Selector `.metric-value` mengatur bagian spesifik dari dashboard prediksi. */
+.metric-value {
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: clamp(1.55rem, 2vw, 2.25rem);
+  /* Ketebalan font menonjolkan label, angka statistik, atau judul. */
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 0.35rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Selector `.metric-value-sm` mengatur bagian spesifik dari dashboard prediksi. */
+.metric-value-sm {
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: clamp(1.05rem, 1.4vw, 1.45rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.metric-note,
+.history-summary,
+.result-meta,
+.spotlight-meta,
+/* Selector `.runtime-footer-value` mengatur bagian spesifik dari dashboard prediksi. */
+.runtime-footer-value {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.metric-note {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Selector `.section-title` mengatur bagian spesifik dari dashboard prediksi. */
+.section-title {
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 1.35rem;
+  /* Margin mengatur jarak luar antar bagian dashboard. */
+  margin: 0.15rem 0 0;
+}
+
+/* Card dashboard menjadi wadah form, runtime, statistik, hasil, dan riwayat. */
+.dashboard-card {
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 1.35rem;
+}
+
+/* Selector `.dashboard-card-accent` mengatur bagian spesifik dari dashboard prediksi. */
+.dashboard-card-accent {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 241, 0.96));
+}
+
+/* Selector `.card-head` mengatur bagian spesifik dari dashboard prediksi. */
+.card-head {
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: flex;
+  justify-content: space-between;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Grid runtime menyusun profile model, backend, patch, threshold, dan TensorFlow. */
+.runtime-grid {
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: grid;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 0.85rem;
+  /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Selector `.runtime-item` mengatur bagian spesifik dari dashboard prediksi. */
+.runtime-item {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: var(--surface-alt);
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 1px solid var(--line);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: var(--radius-md);
+  min-height: 92px;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 0.95rem 1rem;
+}
+
+/* Selector `.runtime-key` mengatur bagian spesifik dari dashboard prediksi. */
+.runtime-key {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: block;
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.84rem;
+  margin-bottom: 0.45rem;
+}
+
+/* Selector `.runtime-value` mengatur bagian spesifik dari dashboard prediksi. */
+.runtime-value {
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: block;
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 1rem;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* Selector `.runtime-footer` mengatur bagian spesifik dari dashboard prediksi. */
+.runtime-footer {
+  border-top: 1px solid var(--line);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+/* Selector `.runtime-footer-label` mengatur bagian spesifik dari dashboard prediksi. */
+.runtime-footer-label {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--brand-strong);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.82rem;
+  /* Ketebalan font menonjolkan label, angka statistik, atau judul. */
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+/* Selector `.empty-state` mengatur bagian spesifik dari dashboard prediksi. */
+.empty-state {
+  align-items: center;
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: linear-gradient(135deg, rgba(31, 111, 95, 0.08), rgba(217, 106, 43, 0.08));
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 1px dashed var(--line-strong);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: var(--radius-md);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: flex;
+  justify-content: center;
+  min-height: 280px;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.spotlight-grid,
+/* Selector `.result-grid` mengatur bagian spesifik dari dashboard prediksi. */
+.result-grid {
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: grid;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 1rem;
+}
+
+/* Selector `.spotlight-grid` mengatur bagian spesifik dari dashboard prediksi. */
+.spotlight-grid {
+  /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+/* Selector `.result-grid` mengatur bagian spesifik dari dashboard prediksi. */
+.result-grid {
+  align-items: stretch;
+  /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+  grid-template-columns: minmax(0, 2.1fr) minmax(280px, 0.95fr);
+}
+
+.spotlight-visual,
+/* Selector `.result-panel` mengatur bagian spesifik dari dashboard prediksi. */
+.result-panel {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: var(--surface-alt);
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 1px solid var(--line);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: var(--radius-md);
+  /* Overflow mengontrol konten panjang seperti tabel riwayat atau legenda. */
+  overflow: hidden;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 0.85rem;
+}
+
+.spotlight-caption,
+/* Selector `.result-caption` mengatur bagian spesifik dari dashboard prediksi. */
+.result-caption {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
+/* Selector `.result-caption-row` mengatur bagian spesifik dari dashboard prediksi. */
+.result-caption-row {
+  align-items: center;
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: flex;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+/* Selector `.result-caption-row .result-caption` mengatur bagian spesifik dari dashboard prediksi. */
+.result-caption-row .result-caption {
+  margin-bottom: 0;
+}
+
+/* Selector `.map-toggle` mengatur bagian spesifik dari dashboard prediksi. */
+.map-toggle {
+  align-items: center;
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(255, 255, 255, 0.78);
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 1px solid var(--line);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: 999px;
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--ink);
+  cursor: pointer;
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: inline-flex;
+  flex: 0 0 auto;
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.78rem;
+  /* Ketebalan font menonjolkan label, angka statistik, atau judul. */
+  font-weight: 600;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 0.45rem;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 0.38rem 0.65rem;
+  user-select: none;
+}
+
+/* Selector `.map-toggle input` mengatur bagian spesifik dari dashboard prediksi. */
+.map-toggle input {
+  accent-color: var(--brand);
+  /* Tinggi elemen menjaga proporsi panel/gambar hasil. */
+  height: 16px;
+  /* Lebar elemen disesuaikan dengan container atau gambar hasil. */
+  width: 16px;
+}
+
+/* Selector `.map-toggle.is-disabled` mengatur bagian spesifik dari dashboard prediksi. */
+.map-toggle.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Selector `.result-explain` mengatur bagian spesifik dari dashboard prediksi. */
+.result-explain {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 0.45rem;
+  /* Batas lebar menjaga layout tetap nyaman di layar besar. */
+  max-width: 92ch;
+}
+
+/* Selector `.result-panel-featured` mengatur bagian spesifik dari dashboard prediksi. */
+.result-panel-featured {
+  grid-row: span 3;
+}
+
+/* Selector `.result-panel-support` mengatur bagian spesifik dari dashboard prediksi. */
+.result-panel-support {
+  min-height: 0;
+}
+
+.spotlight-image,
+/* Gambar hasil prediksi distandarkan agar heatmap/overlay/binary rapi. */
+.result-image {
+  aspect-ratio: 1528 / 773;
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: linear-gradient(180deg, #f1f5f4, #fafcfb);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: var(--radius-sm);
+  /* Object-fit memastikan heatmap/overlay tidak terdistorsi di panel gambar. */
+  object-fit: contain;
+  /* Lebar elemen disesuaikan dengan container atau gambar hasil. */
+  width: 100%;
+}
+
+/* Overlay utama diberi ukuran lebih dominan karena menjadi hasil paling mudah dibaca. */
+.result-image-featured {
+  min-height: 520px;
+}
+
+/* Selector `.result-panel-support .result-image` mengatur bagian spesifik dari dashboard prediksi. */
+.result-panel-support .result-image {
+  min-height: 190px;
+}
+
+/* Selector `.result-image-binary` mengatur bagian spesifik dari dashboard prediksi. */
+.result-image-binary {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background:
+    linear-gradient(45deg, rgba(24, 49, 42, 0.06) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(24, 49, 42, 0.06) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(24, 49, 42, 0.06) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(24, 49, 42, 0.06) 75%),
+    #f6f8f7;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  background-size: 20px 20px;
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 1px solid rgba(24, 49, 42, 0.16);
+  image-rendering: pixelated;
+}
+
+/* Selector `.binary-mask-note` mengatur bagian spesifik dari dashboard prediksi. */
+.binary-mask-note {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-top: 0.65rem;
+}
+
+/* Selector `.map-legend-wrap` mengatur bagian spesifik dari dashboard prediksi. */
+.map-legend-wrap {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(255, 255, 255, 0.72);
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 1px solid var(--line);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: var(--radius-sm);
+  margin-top: 0.85rem;
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 0.85rem;
+}
+
+/* Selector `.map-legend-title` mengatur bagian spesifik dari dashboard prediksi. */
+.map-legend-title {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--ink);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.95rem;
+  /* Ketebalan font menonjolkan label, angka statistik, atau judul. */
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+/* Selector `.map-legend-note` mengatur bagian spesifik dari dashboard prediksi. */
+.map-legend-note {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 0.7rem;
+}
+
+/* Legenda wilayah menghubungkan nomor pada overlay dengan kabupaten/kota. */
+.map-legend {
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: grid;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 0.45rem 0.75rem;
+  /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Selector `.map-legend-item` mengatur bagian spesifik dari dashboard prediksi. */
+.map-legend-item {
+  align-items: center;
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--ink);
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: flex;
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.82rem;
+  /* Gap memberi jarak antar elemen agar form, hasil, dan riwayat tidak menempel. */
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+/* Selector `.map-legend-number` mengatur bagian spesifik dari dashboard prediksi. */
+.map-legend-number {
+  align-items: center;
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: 999px;
+  /* Shadow memberi kedalaman ringan pada card utama. */
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.28);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: #ffffff;
+  /* Display menentukan apakah elemen memakai grid, flex, block, atau inline sesuai layout. */
+  display: inline-flex;
+  flex: 0 0 26px;
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.74rem;
+  /* Ketebalan font menonjolkan label, angka statistik, atau judul. */
+  font-weight: 800;
+  /* Tinggi elemen menjaga proporsi panel/gambar hasil. */
+  height: 26px;
+  justify-content: center;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+/* Selector `.map-legend-empty` mengatur bagian spesifik dari dashboard prediksi. */
+.map-legend-empty {
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.85rem;
+}
+
+/* Selector `.spotlight-title` mengatur bagian spesifik dari dashboard prediksi. */
+.spotlight-title {
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 1.1rem;
+  /* Margin mengatur jarak luar antar bagian dashboard. */
+  margin: 0 0 0.4rem;
+}
+
+/* Selector `.spotlight-meta-wrap` mengatur bagian spesifik dari dashboard prediksi. */
+.spotlight-meta-wrap {
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+/* Selector `.result-output-list` mengatur bagian spesifik dari dashboard prediksi. */
+.result-output-list {
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+/* Selector `.dashboard-button` mengatur bagian spesifik dari dashboard prediksi. */
+.dashboard-button {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+  /* Border memberi batas visual antar card, panel, atau tabel. */
+  border: 0;
+}
+
+.dashboard-button:hover,
+/* Selector `.dashboard-button:focus` mengatur bagian spesifik dari dashboard prediksi. */
+.dashboard-button:focus {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: linear-gradient(135deg, var(--brand-strong), #0b3f35);
+}
+
+/* Selector `.history-head` mengatur bagian spesifik dari dashboard prediksi. */
+.history-head {
+  align-items: flex-start;
+}
+
+/* Selector `.history-table thead th` mengatur bagian spesifik dari dashboard prediksi. */
+.history-table thead th {
+  border-bottom-width: 1px;
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--muted);
+  /* Ukuran font disesuaikan dengan hierarki informasi dashboard. */
+  font-size: 0.82rem;
+  /* Ketebalan font menonjolkan label, angka statistik, atau judul. */
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Selector `.history-table tbody td` mengatur bagian spesifik dari dashboard prediksi. */
+.history-table tbody td {
+  border-color: rgba(24, 49, 42, 0.08);
+  padding-block: 0.85rem;
+  vertical-align: middle;
+}
+
+/* Selector `code` mengatur bagian spesifik dari dashboard prediksi. */
+code {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: rgba(31, 111, 95, 0.08);
+  /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+  border-radius: 8px;
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--brand-strong);
+  /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+  padding: 0.1rem 0.35rem;
+}
+
+.form-control,
+/* Selector `.form-select` mengatur bagian spesifik dari dashboard prediksi. */
+.form-select {
+  border-color: rgba(24, 49, 42, 0.18);
+  min-height: 48px;
+}
+
+.form-control:focus,
+/* Selector `.form-select:focus` mengatur bagian spesifik dari dashboard prediksi. */
+.form-select:focus {
+  border-color: rgba(31, 111, 95, 0.45);
+  /* Shadow memberi kedalaman ringan pada card utama. */
+  box-shadow: 0 0 0 0.18rem rgba(31, 111, 95, 0.15);
+}
+
+/* Selector `.btn-outline-primary` mengatur bagian spesifik dari dashboard prediksi. */
+.btn-outline-primary {
+  border-color: rgba(31, 111, 95, 0.4);
+  /* Warna teks disesuaikan dengan palet dashboard agar mudah dibaca. */
+  color: var(--brand-strong);
+}
+
+/* Selector `.btn-outline-primary:hover` mengatur bagian spesifik dari dashboard prediksi. */
+.btn-outline-primary:hover {
+  /* Background memberi lapisan visual agar dashboard tidak datar dan hasil peta tetap menonjol. */
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+/* Mengatur tampilan agar tetap rapi di ukuran layar tertentu.  */
+/* Media query menjaga dashboard tetap responsif di layar kecil. */
+@media (max-width: 1200px) {
+  /* Selector `.stats-grid` mengatur bagian spesifik dari dashboard prediksi. */
+  .stats-grid {
+    /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Selector `.result-grid` mengatur bagian spesifik dari dashboard prediksi. */
+  .result-grid {
+    /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+    grid-template-columns: 1fr;
+  }
+
+  /* Selector `.result-panel-featured` mengatur bagian spesifik dari dashboard prediksi. */
+  .result-panel-featured {
+    grid-row: auto;
+  }
+
+  /* Overlay utama diberi ukuran lebih dominan karena menjadi hasil paling mudah dibaca. */
+  .result-image-featured {
+    min-height: 380px;
+  }
+
+  /* Legenda wilayah menghubungkan nomor pada overlay dengan kabupaten/kota. */
+  .map-legend {
+    /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mengatur tampilan agar tetap rapi di ukuran layar tertentu.  */
+/* Media query menjaga dashboard tetap responsif di layar kecil. */
+@media (max-width: 767.98px) {
+  .hero-panel,
+  /* Card dashboard menjadi wadah form, runtime, statistik, hasil, dan riwayat. */
+  .dashboard-card {
+    /* Radius membuat card/panel terlihat lebih halus namun tetap utilitarian. */
+    border-radius: 20px;
+    /* Padding memberi ruang dalam komponen supaya isi panel tidak terlalu rapat. */
+    padding: 1rem;
+  }
+
+  /* Judul utama dibuat kuat agar topik ConvLSTM dan hotspot langsung terbaca. */
+  .hero-title {
+    /* Batas lebar menjaga layout tetap nyaman di layar besar. */
+    max-width: none;
+  }
+
+  .stats-grid,
+  .runtime-grid,
+  .spotlight-grid,
+  /* Selector `.result-grid` mengatur bagian spesifik dari dashboard prediksi. */
+  .result-grid {
+    /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+    grid-template-columns: 1fr;
+  }
+
+  .result-image-featured,
+  /* Selector `.result-panel-support .result-image` mengatur bagian spesifik dari dashboard prediksi. */
+  .result-panel-support .result-image {
+    min-height: 260px;
+  }
+
+  /* Selector `.result-caption-row` mengatur bagian spesifik dari dashboard prediksi. */
+  .result-caption-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  /* Legenda wilayah menghubungkan nomor pada overlay dengan kabupaten/kota. */
+  .map-legend {
+    /* Kolom grid mengatur pembagian ruang antar panel dashboard. */
+    grid-template-columns: 1fr;
+  }
+
+  /* Selector `.card-head` mengatur bagian spesifik dari dashboard prediksi. */
+  .card-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Tabel riwayat menyajikan metadata prediksi lama agar dapat dibuka ulang. */
+  .history-table {
+    min-width: 720px;
+  }
+}

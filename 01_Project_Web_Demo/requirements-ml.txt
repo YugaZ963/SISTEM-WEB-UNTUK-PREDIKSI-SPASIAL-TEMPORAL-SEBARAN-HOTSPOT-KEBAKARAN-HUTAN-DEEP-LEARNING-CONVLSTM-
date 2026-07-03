@@ -1,0 +1,5 @@
+# Dependency machine learning mewarisi dependency backend utama.
+-r requirements.txt
+
+# TensorFlow dipakai untuk memuat dan menjalankan model ConvLSTM.
+tensorflow==2.15.1

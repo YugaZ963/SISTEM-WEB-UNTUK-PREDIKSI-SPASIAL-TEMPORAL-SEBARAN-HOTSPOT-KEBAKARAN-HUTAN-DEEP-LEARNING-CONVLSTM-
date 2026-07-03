@@ -1,0 +1,18 @@
+# Dependency utama untuk menjalankan backend FastAPI dan dashboard web.
+# FastAPI menyediakan endpoint API, validasi request, dan dokumentasi backend.
+fastapi>=0.116.0
+
+# Uvicorn menjalankan aplikasi FastAPI melalui server ASGI.
+uvicorn[standard]>=0.35.0
+
+# python-multipart diperlukan agar endpoint dapat menerima upload file form-data.
+python-multipart>=0.0.20
+
+# NumPy dipakai untuk tensor input, probability map, dan array hasil prediksi.
+numpy>=1.26.0,<2.0.0
+
+# Pillow dipakai untuk membuka, memproses, dan menyimpan citra hotspot/overlay.
+Pillow>=11.0.0
+
+# Jinja2 dipakai oleh FastAPI untuk merender template dashboard HTML.
+jinja2>=3.1.0

@@ -1,0 +1,17 @@
+{
+  "source": "NASA FIRMS",
+  "dataset": "MODIS_SP",
+  "start_date": "2025-06-21",
+  "end_date": "2025-11-25",
+  "bounding_box": {
+    "west": 98.1843,
+    "south": -1.1808,
+    "east": 106.0157,
+    "north": 2.7799
+  },
+  "requests_made": 32,
+  "record_count": 1961,
+  "dates_with_records": 110,
+  "downloaded_at_utc": "2026-06-16T05:18:55.325188+00:00",
+  "api_documentation": "https://firms.modaps.eosdis.nasa.gov/api/area/"
+}

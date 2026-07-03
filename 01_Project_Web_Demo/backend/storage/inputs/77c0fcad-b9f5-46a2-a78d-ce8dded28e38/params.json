@@ -1,0 +1,122 @@
+{
+  "prediction_id": "77c0fcad-b9f5-46a2-a78d-ce8dded28e38",
+  "created_at": "2026-06-29T04:52:40.879060+00:00",
+  "threshold": 0.55,
+  "recommended_threshold": 0.55,
+  "horizon": 1,
+  "grid_size": 160,
+  "channels": 1,
+  "model_profile": "historical_risk_patch_160",
+  "model_display_name": "Historical Risk Patch ConvLSTM 160x160",
+  "inference_mode": "patch_stitch",
+  "patch_size": 160,
+  "patch_stride": 80,
+  "input_dilation_kernel": 5,
+  "prediction_engine": "convlstm-tensorflow (compat-weights best_model_convlstm_historical_risk_patch.keras)",
+  "model_backend": "convlstm-tensorflow (compat-weights best_model_convlstm_historical_risk_patch.keras)",
+  "model_path": "C:\\laragon\\www\\sistem-web-skripsi-ta - 2\\02_Project_Web_Demo\\backend\\models\\historical_risk_patch_20260416\\best_model_convlstm_historical_risk_patch.keras",
+  "processing_time_ms": 138488,
+  "preprocess_mode": "hotspot_red_mask",
+  "output_shape": [
+    772,
+    1536
+  ],
+  "input_files": {
+    "H-6": "H-6_2025-12-03.png",
+    "H-5": "H-5_2025-12-04.png",
+    "H-4": "H-4_2025-12-05.png",
+    "H-3": "H-3_2025-12-06.png",
+    "H-2": "H-2_2025-12-07.png",
+    "H-1": "H-1_2025-12-08.png",
+    "H0": "H0_2025-12-09.png"
+  },
+  "input_dates": {
+    "H-6": "2025-12-03",
+    "H-5": "2025-12-04",
+    "H-4": "2025-12-05",
+    "H-3": "2025-12-06",
+    "H-2": "2025-12-07",
+    "H-1": "2025-12-08",
+    "H0": "2025-12-09"
+  },
+  "target_date": "2025-12-10",
+  "admin_regions": [
+    {
+      "number": 1,
+      "name": "Kota Pekanbaru",
+      "color": "#8b4513"
+    },
+    {
+      "number": 2,
+      "name": "Kota Dumai",
+      "color": "#ff7a00"
+    },
+    {
+      "number": 3,
+      "name": "Siak",
+      "color": "#ef476f"
+    },
+    {
+      "number": 4,
+      "name": "Bengkalis",
+      "color": "#00b4d8"
+    },
+    {
+      "number": 5,
+      "name": "Kampar",
+      "color": "#8338ec"
+    },
+    {
+      "number": 6,
+      "name": "Rokan Hilir",
+      "color": "#5e60ce"
+    },
+    {
+      "number": 7,
+      "name": "Rokan Hulu",
+      "color": "#118ab2"
+    },
+    {
+      "number": 8,
+      "name": "Kuantan Singingi",
+      "color": "#7cb518"
+    },
+    {
+      "number": 9,
+      "name": "Pelalawan",
+      "color": "#f15bb5"
+    },
+    {
+      "number": 10,
+      "name": "Indragiri Hulu",
+      "color": "#ff006e"
+    },
+    {
+      "number": 11,
+      "name": "Indragiri Hilir",
+      "color": "#ffd60a"
+    },
+    {
+      "number": 12,
+      "name": "Kepulauan Meranti",
+      "color": "#06d6a0"
+    }
+  ],
+  "visual_style_version": "admin-number-toggle-v4-20260617",
+  "outputs": [
+    {
+      "step": 1,
+      "heatmap_url": "/storage/outputs/77c0fcad-b9f5-46a2-a78d-ce8dded28e38/heatmap_H+1.png",
+      "overlay_url": "/storage/outputs/77c0fcad-b9f5-46a2-a78d-ce8dded28e38/overlay_H+1.png",
+      "overlay_no_numbers_url": "/storage/outputs/77c0fcad-b9f5-46a2-a78d-ce8dded28e38/overlay_no_numbers_H+1.png",
+      "overlay_plain_url": "/storage/outputs/77c0fcad-b9f5-46a2-a78d-ce8dded28e38/overlay_plain_H+1.png",
+      "binary_url": "/storage/outputs/77c0fcad-b9f5-46a2-a78d-ce8dded28e38/binary_H+1.png",
+      "probability_file": "probability_H+1.npy",
+      "heatmap_file": "heatmap_H+1.png",
+      "overlay_file": "overlay_H+1.png",
+      "overlay_no_numbers_file": "overlay_no_numbers_H+1.png",
+      "overlay_plain_file": "overlay_plain_H+1.png",
+      "binary_file": "binary_H+1.png"
+    }
+  ]
+}

@@ -1,0 +1,552 @@
+<!doctype html>
+<!-- Komentar file skripsi:
+     Template dashboard sistem web untuk upload citra, melihat status runtime model,
+     menampilkan hasil prediksi hotspot, dan melihat riwayat prediksi.
+     Konteks laporan: file ini mendukung BAB IV pada bagian deployment sistem web,
+     karena menjadi tampilan utama yang menghubungkan pengguna dengan API prediksi backend.
+-->
+
+<!-- Elemen root HTML menggunakan bahasa Indonesia karena dashboard ditujukan untuk pengguna/laporan berbahasa Indonesia. -->
+<html lang="id">
+  <!-- Bagian head berisi metadata halaman, judul, serta koneksi CSS dashboard. -->
+  <head>
+    <!-- Charset UTF-8 digunakan agar teks Indonesia dan karakter khusus dapat tampil dengan benar. -->
+    <meta charset="utf-8" />
+
+    <!-- Viewport membuat dashboard responsif pada laptop, tablet, dan perangkat mobile. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Judul halaman yang tampil pada tab browser. -->
+    <title>Dashboard Prediksi Hotspot</title>
+
+    <!-- Bootstrap digunakan untuk membantu layout grid, button, form, table, dan komponen responsif. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- styles.css adalah CSS lokal untuk desain khusus dashboard prediksi hotspot. -->
+    <link href="/static/styles.css?v={{ static_asset_version }}" rel="stylesheet" />
+  </head>
+
+  <!-- Body memakai class dashboard-body agar seluruh halaman mendapat style khusus dashboard. -->
+  <body class="dashboard-body">
+    <!-- Main adalah container utama seluruh isi dashboard. -->
+    <main class="container-fluid px-3 px-lg-4 py-4 dashboard-shell">
+      <!-- Hero panel adalah bagian pembuka yang menjelaskan fungsi utama sistem web. -->
+      <section class="hero-panel mb-4">
+        <!-- Row Bootstrap digunakan untuk membagi area deskripsi sistem dan status runtime. -->
+        <div class="row g-4 align-items-end">
+          <!-- Kolom kiri berisi judul, deskripsi, dan chip konfigurasi model. -->
+          <div class="col-xl-8">
+            <!-- Eyebrow adalah label kecil untuk memperjelas konteks halaman. -->
+            <div class="eyebrow">Dashboard Sistem Web</div>
+
+            <!-- Judul utama dashboard yang menjelaskan topik sistem prediksi. -->
+            <h1 class="hero-title">Prediksi Area Risiko Hotspot Berbasis ConvLSTM</h1>
+
+            <!-- Deskripsi singkat alur input dan output sistem. -->
+            <p class="hero-lead mb-3">
+              <!-- Teks ini menjelaskan bahwa sistem memakai 7 citra historis dari H-6 sampai H0. -->
+              Sistem menerima 7 citra historis hotspot dari <code>H-6</code> sampai <code>H0</code>, memproses sequence citra,
+              <!-- Teks ini menjelaskan target keluaran model, yaitu prediksi H+1. -->
+              lalu menghasilkan prediksi area risiko hotspot untuk <code>H+1</code>.
+            </p>
+
+            <!-- Baris chip menampilkan konfigurasi penting yang dikirim dari backend FastAPI/Jinja. -->
+            <div class="hero-chip-row">
+              <!-- Menampilkan nama model aktif dari variabel model_display_name. -->
+              <span class="hero-chip">Model aktif: <strong>{{ model_display_name }}</strong></span>
+
+              <!-- Menampilkan mode inferensi, misalnya patch_stitch atau direct_resize. -->
+              <span class="hero-chip">Mode inferensi: <strong>{{ inference_mode }}</strong></span>
+
+              <!-- Menampilkan ukuran input model aktif. -->
+              <span class="hero-chip">Ukuran input model: <strong>{{ grid_size }} x {{ grid_size }}</strong></span>
+
+              <!-- Kondisi Jinja: threshold hanya ditampilkan jika tersedia dari backend. -->
+              {% if recommended_threshold is not none %}
+              <!-- Menampilkan threshold rekomendasi model aktif. -->
+              <span class="hero-chip">Threshold rekomendasi: <strong>{{ "%.2f"|format(recommended_threshold) }}</strong></span>
+              {% endif %}
+
+              <!-- Menampilkan batas ukuran file upload dari konfigurasi backend. -->
+              <span class="hero-chip">Batas file: <strong>{{ max_file_mb }}MB / file</strong></span>
+            </div>
+          </div>
+
+          <!-- Kolom kanan berisi kartu status runtime aktif. -->
+          <div class="col-xl-4">
+            <!-- Card runtime menampilkan apakah backend memakai ConvLSTM atau fallback. -->
+            <section class="dashboard-card runtime-hero-card h-100">
+              <!-- Label bagian runtime. -->
+              <div class="section-label">Runtime Aktif</div>
+
+              <!-- Badge ini akan diisi oleh app.js berdasarkan response /api/runtime/status. -->
+              <div id="runtime-state-badge" class="status-badge status-pending">Memuat status</div>
+
+              <!-- Teks status runtime yang diperbarui secara dinamis oleh JavaScript. -->
+              <p id="runtime-state-text" class="status-copy mb-0">Mengecek backend model, preprocess, dan mode inferensi yang sedang aktif.</p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats grid menampilkan ringkasan angka penting dari riwayat prediksi. -->
+      <section class="stats-grid mb-4">
+        <!-- Metric card jumlah prediksi tersimpan. -->
+        <article class="dashboard-card metric-card">
+          <!-- Label metrik total prediksi. -->
+          <div class="metric-label">Prediksi Tersimpan</div>
+          <!-- Nilai total prediksi diisi oleh app.js dari endpoint riwayat. -->
+          <div id="stat-total-predictions" class="metric-value">-</div>
+          <!-- Catatan total prediksi. -->
+          <div id="stat-total-note" class="metric-note">Menghitung riwayat terbaru</div>
+        </article>
+
+        <!-- Metric card prediksi terakhir. -->
+        <article class="dashboard-card metric-card">
+          <!-- Label metrik prediksi terakhir. -->
+          <div class="metric-label">Prediksi Terakhir</div>
+          <!-- Waktu/ID prediksi terakhir diisi oleh JavaScript. -->
+          <div id="stat-latest-run" class="metric-value metric-value-sm">-</div>
+          <!-- Catatan aktivitas terakhir. -->
+          <div id="stat-latest-note" class="metric-note">Belum ada aktivitas</div>
+        </article>
+
+        <!-- Metric card rata-rata waktu proses. -->
+        <article class="dashboard-card metric-card">
+          <!-- Label metrik rata-rata proses. -->
+          <div class="metric-label">Rata-rata Proses</div>
+          <!-- Nilai rata-rata proses prediksi diisi dari data riwayat. -->
+          <div id="stat-avg-processing" class="metric-value">-</div>
+          <!-- Catatan sumber perhitungan rata-rata proses. -->
+          <div id="stat-avg-note" class="metric-note">Dari riwayat yang tersedia</div>
+        </article>
+
+        <!-- Metric card backend prediksi aktif. -->
+        <article class="dashboard-card metric-card">
+          <!-- Label metrik backend prediksi. -->
+          <div class="metric-label">Backend Prediksi</div>
+          <!-- Nama engine aktif diisi dari /api/runtime/status. -->
+          <div id="stat-active-engine" class="metric-value metric-value-sm">-</div>
+          <!-- Catatan engine runtime. -->
+          <div id="stat-engine-note" class="metric-note">Menunggu status runtime</div>
+        </article>
+      </section>
+
+      <!-- Row berikut berisi ringkasan runtime dan spotlight prediksi terbaru. -->
+      <section class="row g-4 mb-4">
+        <!-- Kolom kiri untuk ringkasan konfigurasi sistem aktif. -->
+        <div class="col-xl-5">
+          <!-- Card ringkasan runtime. -->
+          <section class="dashboard-card h-100">
+            <!-- Header card runtime berisi judul dan tombol refresh. -->
+            <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+              <div>
+                <!-- Label bagian runtime. -->
+                <div class="section-label">Ringkasan Runtime</div>
+                <!-- Judul bagian konfigurasi sistem aktif. -->
+                <h2 class="section-title">Konfigurasi Sistem Aktif</h2>
+              </div>
+
+              <!-- Tombol untuk memuat ulang status runtime dari backend. -->
+              <button id="refresh-runtime" class="btn btn-sm btn-outline-dark">Refresh Runtime</button>
+            </div>
+
+            <!-- Grid informasi runtime model. -->
+            <div class="runtime-grid">
+              <!-- Item profile model aktif. -->
+              <div class="runtime-item">
+                <span class="runtime-key">Profile model</span>
+                <strong id="runtime-model-profile" class="runtime-value">-</strong>
+              </div>
+
+              <!-- Item nama model aktif. -->
+              <div class="runtime-item">
+                <span class="runtime-key">Nama model</span>
+                <strong id="runtime-model-name" class="runtime-value">-</strong>
+              </div>
+
+              <!-- Item backend prediksi aktif. -->
+              <div class="runtime-item">
+                <span class="runtime-key">Backend</span>
+                <strong id="runtime-engine" class="runtime-value">-</strong>
+              </div>
+
+              <!-- Item mode preprocessing. -->
+              <div class="runtime-item">
+                <span class="runtime-key">Preprocess</span>
+                <strong id="runtime-preprocess" class="runtime-value">-</strong>
+              </div>
+
+              <!-- Item ukuran input model. -->
+              <div class="runtime-item">
+                <span class="runtime-key">Input</span>
+                <strong id="runtime-grid" class="runtime-value">-</strong>
+              </div>
+
+              <!-- Item konfigurasi patch dan stride untuk mode patch_stitch. -->
+              <div class="runtime-item">
+                <span class="runtime-key">Patch / stride</span>
+                <strong id="runtime-patch" class="runtime-value">-</strong>
+              </div>
+
+              <!-- Item threshold rekomendasi. -->
+              <div class="runtime-item">
+                <span class="runtime-key">Threshold</span>
+                <strong id="runtime-threshold" class="runtime-value">-</strong>
+              </div>
+
+              <!-- Item versi TensorFlow runtime. -->
+              <div class="runtime-item">
+                <span class="runtime-key">TensorFlow</span>
+                <strong id="runtime-tf-version" class="runtime-value">-</strong>
+              </div>
+            </div>
+
+            <!-- Footer runtime menampilkan kandidat model yang terdeteksi backend. -->
+            <div class="runtime-footer">
+              <div class="runtime-footer-label">Model candidate</div>
+              <div id="runtime-candidates" class="runtime-footer-value">-</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Kolom kanan untuk prediksi terbaru. -->
+        <div class="col-xl-7">
+          <!-- Card spotlight prediksi terbaru. -->
+          <section class="dashboard-card h-100">
+            <!-- Header spotlight berisi judul dan tombol buka detail. -->
+            <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+              <div>
+                <!-- Label bagian spotlight. -->
+                <div class="section-label">Spotlight</div>
+                <!-- Judul prediksi terbaru. -->
+                <h2 class="section-title">Prediksi Terbaru</h2>
+              </div>
+
+              <!-- Tombol detail disembunyikan sampai ada data prediksi terbaru. -->
+              <button id="spotlight-open" class="btn btn-sm btn-outline-primary d-none" type="button">Buka Detail</button>
+            </div>
+
+            <!-- Empty state jika belum ada riwayat prediksi. -->
+            <div id="spotlight-empty" class="empty-state">Belum ada riwayat prediksi yang dapat ditampilkan.</div>
+
+            <!-- Konten spotlight akan ditampilkan oleh app.js jika riwayat tersedia. -->
+            <div id="spotlight-content" class="d-none">
+              <!-- Grid visual spotlight berisi heatmap dan overlay terbaru. -->
+              <div class="spotlight-grid">
+                <!-- Panel heatmap terbaru. -->
+                <div class="spotlight-visual">
+                  <div class="spotlight-caption">Heatmap terbaru</div>
+                  <img id="spotlight-heatmap" class="spotlight-image" alt="Heatmap terbaru" />
+                </div>
+
+                <!-- Panel overlay terbaru. -->
+                <div class="spotlight-visual">
+                  <div class="spotlight-caption">Overlay terbaru</div>
+                  <img id="spotlight-overlay" class="spotlight-image" alt="Overlay terbaru" />
+                </div>
+              </div>
+
+              <!-- Metadata prediksi terbaru seperti ID, waktu, dan model. -->
+              <div class="spotlight-meta-wrap">
+                <h3 id="spotlight-title" class="spotlight-title">-</h3>
+                <p id="spotlight-meta" class="spotlight-meta mb-0">-</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- Card input prediksi baru untuk mengirim 7 citra historis ke backend. -->
+      <section class="dashboard-card dashboard-card-accent mb-4">
+        <!-- Header card input prediksi. -->
+        <div class="card-head">
+          <div>
+            <!-- Label bagian prediksi baru. -->
+            <div class="section-label">Prediksi Baru</div>
+            <!-- Judul form input prediksi. -->
+            <h2 class="section-title">Input Prediksi</h2>
+          </div>
+        </div>
+
+        <!-- Form utama yang diproses oleh app.js lalu dikirim ke endpoint POST /api/predict. -->
+        <form id="predict-form" class="row g-3">
+          <!-- Input upload 7 gambar. -->
+          <div class="col-12">
+            <!-- Label upload file. -->
+            <label class="form-label" for="files">Upload 7 gambar (PNG/JPG/JPEG)</label>
+
+            <!-- Input file menerima banyak gambar PNG/JPEG dan wajib diisi. -->
+            <input class="form-control" id="files" name="files" type="file" accept="image/png,image/jpeg" multiple required />
+
+            <!-- Petunjuk format nama file yang sesuai validator backend. -->
+            <div class="form-text">Format disarankan: <code>H-6_2025-07-13.png</code> sampai <code>H0_2025-07-19.png</code>. Format lama <code>H-6.png</code> sampai <code>H0.png</code> masih didukung.</div>
+          </div>
+
+          <!-- Input threshold opsional. -->
+          <div class="col-lg-4">
+            <!-- Label threshold. -->
+            <label class="form-label" for="threshold">Threshold (opsional)</label>
+
+            <!-- Input threshold memiliki rentang 0 sampai 1 dan placeholder dari recommended_threshold. -->
+            <input class="form-control" id="threshold" name="threshold" type="number" min="0" max="1" step="0.01" placeholder="{{ recommended_threshold if recommended_threshold is not none else '0.50' }}" />
+
+            <!-- Bantuan penggunaan threshold untuk binary mask. -->
+            <div class="form-text">Kosongkan jika hanya butuh heatmap/overlay; isi threshold untuk membuat binary mask.</div>
+          </div>
+
+          <!-- Input horizon prediksi yang dikunci pada H+1. -->
+          <div class="col-lg-4">
+            <!-- Label horizon prediksi. -->
+            <label class="form-label" for="horizon-display">Horizon Prediksi</label>
+
+            <!-- Tampilan horizon readonly agar user tahu sistem memprediksi H+1. -->
+            <input class="form-control" id="horizon-display" type="text" value="H+1" readonly />
+
+            <!-- Input hidden dikirim ke backend sebagai horizon=1. -->
+            <input id="horizon" name="horizon" type="hidden" value="1" />
+
+            <!-- Penjelasan perhitungan tanggal target H+1. -->
+            <div class="form-text">Jika nama file memakai tanggal, tanggal H+1 otomatis dihitung dari H0 + 1 hari.</div>
+          </div>
+
+          <!-- Tombol submit prediksi. -->
+          <div class="col-lg-2 d-flex align-items-end">
+            <!-- Tombol awalnya disabled sampai app.js memvalidasi jumlah dan nama file. -->
+            <button id="predict-button" class="btn btn-primary dashboard-button w-100" type="submit" disabled>Prediksi</button>
+          </div>
+
+          <!-- Tombol reset form. -->
+          <div class="col-lg-2 d-flex align-items-end">
+            <!-- Tombol reset membersihkan input dan tampilan hasil. -->
+            <button id="reset-button" class="btn btn-outline-secondary w-100" type="button">Reset</button>
+          </div>
+
+          <!-- Informasi jumlah file dan daftar file yang dipilih. -->
+          <div class="col-12">
+            <!-- Counter jumlah file dipilih. -->
+            <div id="file-counter" class="small text-muted">0/7 file terunggah</div>
+
+            <!-- Daftar nama file akan diisi oleh JavaScript. -->
+            <ul id="file-list" class="small mt-2 mb-0 ps-3"></ul>
+          </div>
+        </form>
+
+        <!-- Kotak error untuk menampilkan pesan validasi frontend/backend. -->
+        <div id="error-box" class="alert alert-danger mt-3 d-none" role="alert"></div>
+      </section>
+
+      <!-- Section hasil prediksi disembunyikan sampai proses prediksi berhasil. -->
+      <section id="result-section" class="dashboard-card mb-4 d-none">
+        <!-- Header hasil prediksi. -->
+        <div class="card-head">
+          <div>
+            <!-- Label output. -->
+            <div class="section-label">Output</div>
+
+            <!-- Judul hasil prediksi. -->
+            <h2 class="section-title">Hasil Prediksi</h2>
+
+            <!-- Penjelasan interpretasi output visual. -->
+            <p class="result-explain mb-0">
+              Bagian ini menampilkan peta risiko hotspot H+1. Overlay utama dipakai untuk melihat konteks kabupaten/kota, sedangkan overlay bersih dipakai untuk membaca titik risiko tanpa gangguan batas wilayah.
+            </p>
+          </div>
+        </div>
+
+        <!-- Grid gambar hasil prediksi. -->
+        <div class="result-grid mb-3">
+          <!-- Panel utama overlay prediksi dengan batas kabupaten/kota. -->
+          <div class="result-panel result-panel-featured">
+            <!-- Header caption overlay dan toggle nomor wilayah. -->
+            <div class="result-caption-row">
+              <!-- Caption overlay utama. -->
+              <div class="result-caption">Overlay prediksi dengan batas kabupaten/kota</div>
+
+              <!-- Toggle nomor wilayah dikendalikan oleh app.js. -->
+              <label class="map-toggle" for="region-number-toggle">
+                <!-- Checkbox default aktif untuk menampilkan nomor wilayah. -->
+                <input id="region-number-toggle" type="checkbox" checked />
+                <!-- Teks toggle nomor wilayah. -->
+                <span>Tampilkan nomor wilayah</span>
+              </label>
+            </div>
+
+            <!-- Gambar overlay utama dari backend. -->
+            <img id="result-overlay" class="result-image result-image-featured" alt="Overlay" />
+
+            <!-- Area legenda kabupaten/kota. -->
+            <div class="map-legend-wrap">
+              <!-- Judul legenda peta. -->
+              <div class="map-legend-title">Legenda kabupaten/kota</div>
+
+              <!-- Catatan agar warna wilayah tidak disalahartikan sebagai tingkat risiko. -->
+              <div class="map-legend-note">Warna wilayah hanya sebagai pembeda administrasi, bukan tingkat risiko.</div>
+
+              <!-- Isi legenda akan diisi oleh JavaScript dari admin_regions response API. -->
+              <div id="result-map-legend" class="map-legend"></div>
+            </div>
+          </div>
+
+          <!-- Panel overlay tanpa batas administrasi. -->
+          <div id="result-overlay-plain-panel" class="result-panel result-panel-support">
+            <!-- Caption overlay bersih. -->
+            <div class="result-caption">Overlay prediksi tanpa batas wilayah</div>
+
+            <!-- Gambar overlay bersih dari backend. -->
+            <img id="result-overlay-plain" class="result-image" alt="Overlay tanpa batas" />
+          </div>
+
+          <!-- Panel input terakhir H0 sebagai pembanding visual. -->
+          <div class="result-panel result-panel-support">
+            <!-- Caption input H0. -->
+            <div class="result-caption">Input terakhir (H0)</div>
+
+            <!-- Gambar input H0 yang dipakai sebagai referensi prediksi. -->
+            <img id="result-input" class="result-image" alt="Input H0" />
+          </div>
+
+          <!-- Panel heatmap prediksi. -->
+          <div class="result-panel result-panel-support">
+            <!-- Caption heatmap. -->
+            <div class="result-caption">Heatmap Prediksi</div>
+
+            <!-- Gambar heatmap hasil postprocessing backend. -->
+            <img id="result-heatmap" class="result-image" alt="Heatmap" />
+          </div>
+
+          <!-- Panel binary mask berdasarkan threshold. -->
+          <div id="result-binary-panel" class="result-panel result-panel-support">
+            <!-- Caption binary mask. -->
+            <div class="result-caption">Binary Mask Threshold</div>
+
+            <!-- Gambar binary mask: putih berarti melewati threshold, hitam berarti di bawah threshold. -->
+            <img id="result-binary" class="result-image" alt="Binary mask threshold" />
+
+            <!-- Catatan interpretasi binary mask yang diisi oleh JavaScript. -->
+            <p id="result-binary-note" class="result-note mb-0">
+              Area putih berarti probabilitas model melewati threshold.
+            </p>
+          </div>
+        </div>
+
+        <!-- Metadata hasil prediksi seperti ID, waktu proses, model, threshold, dan target date. -->
+        <div id="result-meta" class="result-meta mb-3"></div>
+
+        <!-- Tombol unduh output visual dan bundle ZIP. -->
+        <div class="d-flex gap-2 flex-wrap mb-3">
+          <!-- Tombol unduh heatmap. -->
+          <a id="download-heatmap" class="btn btn-outline-primary btn-sm" download>Unduh Heatmap</a>
+
+          <!-- Tombol unduh overlay utama. -->
+          <a id="download-overlay" class="btn btn-outline-secondary btn-sm" download>Unduh Overlay</a>
+
+          <!-- Tombol unduh overlay bersih. -->
+          <a id="download-overlay-plain" class="btn btn-outline-secondary btn-sm" download>Unduh Overlay Bersih</a>
+
+          <!-- Tombol unduh binary mask. -->
+          <a id="download-binary" class="btn btn-outline-secondary btn-sm" download>Unduh Binary Mask</a>
+
+          <!-- Tombol unduh semua input/output dalam ZIP. -->
+          <a id="download-zip" class="btn btn-outline-dark btn-sm" download>Unduh Semua (ZIP)</a>
+        </div>
+
+        <!-- Daftar output prediksi H+1. -->
+        <div class="result-output-list">
+          <!-- Label daftar output. -->
+          <div class="section-label mb-2">Output Prediksi H+1</div>
+
+          <!-- Detail output akan diisi oleh app.js. -->
+          <div id="output-list" class="small"></div>
+        </div>
+      </section>
+
+      <!-- Section riwayat prediksi untuk menampilkan data dari endpoint GET /api/predictions. -->
+      <section class="dashboard-card">
+        <!-- Header tabel riwayat. -->
+        <div class="card-head history-head">
+          <div>
+            <!-- Label riwayat. -->
+            <div class="section-label">Riwayat</div>
+
+            <!-- Judul riwayat prediksi. -->
+            <h2 class="section-title mb-1">Riwayat Prediksi</h2>
+
+            <!-- Ringkasan riwayat akan diisi oleh JavaScript. -->
+            <div id="history-summary" class="history-summary">Memuat ringkasan riwayat prediksi.</div>
+          </div>
+
+          <!-- Tombol refresh untuk mengambil ulang data riwayat dari backend. -->
+          <button id="refresh-history" class="btn btn-sm btn-outline-dark">Refresh</button>
+        </div>
+
+        <!-- Table responsive agar tabel riwayat tetap rapi pada layar kecil. -->
+        <div class="table-responsive">
+          <!-- Tabel riwayat prediksi. -->
+          <table class="table table-sm align-middle mb-0 history-table">
+            <!-- Header kolom tabel riwayat. -->
+            <thead>
+              <tr>
+                <!-- Kolom ID prediksi. -->
+                <th>ID</th>
+
+                <!-- Kolom waktu prediksi dibuat. -->
+                <th>Waktu</th>
+
+                <!-- Kolom ringkasan prediksi dan model. -->
+                <th>Prediksi / Model</th>
+
+                <!-- Kolom threshold yang digunakan. -->
+                <th>Threshold</th>
+
+                <!-- Kolom durasi proses prediksi. -->
+                <th>Waktu Proses</th>
+
+                <!-- Kolom output visual. -->
+                <th>Output</th>
+
+                <!-- Kolom aksi seperti detail dan download. -->
+                <th>Aksi</th>
+              </tr>
+            </thead>
+
+            <!-- Body tabel akan diisi oleh app.js dari data riwayat API. -->
+            <tbody id="history-body">
+              <!-- Row default ketika belum ada data riwayat. -->
+              <tr>
+                <td colspan="7" class="text-secondary">Belum ada data.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Script konfigurasi global dari backend ke frontend. -->
+    <script>
+      // APP_CONFIG menyimpan konfigurasi awal yang dikirim oleh FastAPI/Jinja ke app.js.
+      window.APP_CONFIG = {
+        // requiredStems berisi urutan file wajib H-6 sampai H0.
+        requiredStems: {{ required_stems | tojson }},
+
+        // modelProfile berisi profile model aktif dari backend.
+        modelProfile: {{ model_profile | tojson }},
+
+        // modelDisplayName berisi nama tampilan model aktif.
+        modelDisplayName: {{ model_display_name | tojson }},
+
+        // inferenceMode berisi mode inferensi seperti patch_stitch atau direct_resize.
+        inferenceMode: {{ inference_mode | tojson }},
+
+        // recommendedThreshold berisi threshold rekomendasi model aktif.
+        recommendedThreshold: {{ recommended_threshold | tojson }},
+
+        // gridSize berisi ukuran input model aktif.
+        gridSize: {{ grid_size | tojson }}
+      };
+    </script>
+
+    <!-- app.js berisi logika frontend: validasi file, kirim prediksi, render output, runtime, dan riwayat. -->
+    <script src="/static/app.js?v={{ static_asset_version }}"></script>
+  </body>
+</html>

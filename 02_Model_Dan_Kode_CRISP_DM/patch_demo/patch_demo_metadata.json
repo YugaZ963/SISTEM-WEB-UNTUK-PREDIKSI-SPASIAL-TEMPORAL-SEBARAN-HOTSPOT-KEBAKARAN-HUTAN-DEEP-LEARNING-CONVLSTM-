@@ -1,0 +1,32 @@
+{
+  "source_file": "Ipynb\\Dataset History Fire Hotspot In Riau Province PNG\\FIRMS_2025-07-19[@102.1,0.8,8.1z].png",
+  "source_width": 1528,
+  "source_height": 773,
+  "patch_width": 160,
+  "patch_height": 160,
+  "patch_stride_in_web_inference": 80,
+  "input_dilation_kernel": 5,
+  "raw_red_pixel_count": 4288,
+  "dilated_red_pixel_count": 9099,
+  "positive_patch_box": [
+    252,
+    274,
+    412,
+    434
+  ],
+  "positive_patch_hotspot_pixels_after_dilation": 2401,
+  "negative_patch_box": [
+    1280,
+    0,
+    1440,
+    160
+  ],
+  "outputs": {
+    "full_grid": "docs\\patch_demo\\gambar_penuh_dengan_grid_patch_160.png",
+    "composite": "docs\\patch_demo\\ringkasan_visual_teknik_patch.png",
+    "positive_patch_rgb": "docs\\patch_demo\\patch_positif_160x160_rgb.png",
+    "negative_patch_rgb": "docs\\patch_demo\\patch_negatif_160x160_rgb.png",
+    "positive_patch_mask": "docs\\patch_demo\\patch_positif_160x160_mask.png",
+    "negative_patch_mask": "docs\\patch_demo\\patch_negatif_160x160_mask.png"
+  }
+}

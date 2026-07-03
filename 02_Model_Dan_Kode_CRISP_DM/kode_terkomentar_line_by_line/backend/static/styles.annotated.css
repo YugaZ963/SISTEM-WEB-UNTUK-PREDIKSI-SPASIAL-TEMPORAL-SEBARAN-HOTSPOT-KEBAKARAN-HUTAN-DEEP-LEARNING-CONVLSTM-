@@ -1,0 +1,787 @@
+/* File anotasi dari `backend/static/styles.css`.  */
+/* File ini untuk belajar/lampiran, bukan source utama aplikasi.  */
+/* Konteks laporan: Deployment, yaitu menjalankan model di sistem web.  */
+/* Setiap komentar menjelaskan tujuan baris kode di bawahnya secara singkat.  */
+/* Catatan CSS untuk menjelaskan pengaturan tampilan.  */
+/* Komentar file skripsi:
+   /* Mengatur tampilan `Style dashboard sistem web prediksi hotspot` pada elemen halaman.  */
+   Style dashboard sistem web prediksi hotspot: layout, kartu metrik, form upload, hasil prediksi, dan riwayat.
+   /* Mengatur tampilan `Konteks laporan` pada elemen halaman.  */
+   Konteks laporan: mendukung deployment sistem web pada BAB IV.
+/* Mengatur tampilan visual dashboard.  */
+*/
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+:root {
+  /* Mengatur tampilan `--bg` pada elemen halaman.  */
+  --bg: #eef2f1;
+  /* Mengatur tampilan `--surface` pada elemen halaman.  */
+  --surface: #ffffff;
+  /* Mengatur tampilan `--surface-alt` pada elemen halaman.  */
+  --surface-alt: #f7f8f3;
+  /* Mengatur tampilan `--ink` pada elemen halaman.  */
+  --ink: #18312a;
+  /* Mengatur tampilan `--muted` pada elemen halaman.  */
+  --muted: #5f716b;
+  /* Mengatur tampilan `--line` pada elemen halaman.  */
+  --line: rgba(24, 49, 42, 0.12);
+  /* Mengatur tampilan `--line-strong` pada elemen halaman.  */
+  --line-strong: rgba(24, 49, 42, 0.2);
+  /* Mengatur tampilan `--brand` pada elemen halaman.  */
+  --brand: #1f6f5f;
+  /* Mengatur tampilan `--brand-strong` pada elemen halaman.  */
+  --brand-strong: #0f4f42;
+  /* Mengatur tampilan `--accent` pada elemen halaman.  */
+  --accent: #d96a2b;
+  /* Mengatur tampilan `--accent-soft` pada elemen halaman.  */
+  --accent-soft: #fff1e7;
+  /* Mengatur tampilan `--success` pada elemen halaman.  */
+  --success: #157347;
+  /* Mengatur tampilan `--warning` pada elemen halaman.  */
+  --warning: #b96a09;
+  /* Mengatur tampilan `--danger` pada elemen halaman.  */
+  --danger: #b02a37;
+  /* Mengatur tampilan `--shadow` pada elemen halaman.  */
+  --shadow: 0 20px 40px rgba(24, 49, 42, 0.08);
+  /* Mengatur tampilan `--radius-lg` pada elemen halaman.  */
+  --radius-lg: 26px;
+  /* Mengatur tampilan `--radius-md` pada elemen halaman.  */
+  --radius-md: 18px;
+  /* Mengatur tampilan `--radius-sm` pada elemen halaman.  */
+  --radius-sm: 12px;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+body.dashboard-body {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background:
+    /* Mengatur tampilan visual dashboard.  */
+    radial-gradient(circle at top left, rgba(217, 106, 43, 0.14), transparent 24%),
+    /* Mengatur tampilan visual dashboard.  */
+    radial-gradient(circle at top right, rgba(31, 111, 95, 0.12), transparent 28%),
+    /* Mengatur tampilan visual dashboard.  */
+    linear-gradient(180deg, #f8f4ea 0%, var(--bg) 36%, #f1f4f3 100%);
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--ink);
+  /* Mengatur tampilan `min-height` pada elemen halaman.  */
+  min-height: 100vh;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.dashboard-shell {
+  /* Mengatur tampilan `max-width` pada elemen halaman.  */
+  max-width: 1560px;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan visual dashboard.  */
+.hero-panel,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.dashboard-card {
+  /* Mengatur tampilan `border` pada elemen halaman.  */
+  border: 1px solid var(--line);
+  /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+  border-radius: var(--radius-lg);
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: rgba(255, 255, 255, 0.92);
+  /* Mengatur tampilan `box-shadow` pada elemen halaman.  */
+  box-shadow: var(--shadow);
+  /* Mengatur tampilan `backdrop-filter` pada elemen halaman.  */
+  backdrop-filter: blur(12px);
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.hero-panel {
+  /* Mengatur tampilan `overflow` pada elemen halaman.  */
+  overflow: hidden;
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 1.75rem;
+  /* Mengatur tampilan `position` pada elemen halaman.  */
+  position: relative;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.hero-panel::before {
+  /* Mengatur tampilan `content` pada elemen halaman.  */
+  content: "";
+  /* Mengatur tampilan `position` pada elemen halaman.  */
+  position: absolute;
+  /* Mengatur tampilan `inset` pada elemen halaman.  */
+  inset: 0;
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background:
+    /* Mengatur tampilan visual dashboard.  */
+    linear-gradient(135deg, rgba(31, 111, 95, 0.08), transparent 36%),
+    /* Mengatur tampilan visual dashboard.  */
+    linear-gradient(315deg, rgba(217, 106, 43, 0.08), transparent 42%);
+  /* Mengatur tampilan `pointer-events` pada elemen halaman.  */
+  pointer-events: none;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.hero-panel > .row {
+  /* Mengatur tampilan `position` pada elemen halaman.  */
+  position: relative;
+  /* Mengatur tampilan `z-index` pada elemen halaman.  */
+  z-index: 1;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan visual dashboard.  */
+.eyebrow,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.section-label {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--brand-strong);
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 0.76rem;
+  /* Mengatur tampilan `font-weight` pada elemen halaman.  */
+  font-weight: 700;
+  /* Mengatur tampilan `letter-spacing` pada elemen halaman.  */
+  letter-spacing: 0.14em;
+  /* Mengatur tampilan `text-transform` pada elemen halaman.  */
+  text-transform: uppercase;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.hero-title {
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  /* Mengatur tampilan `line-height` pada elemen halaman.  */
+  line-height: 1.05;
+  /* Mengatur tampilan `margin` pada elemen halaman.  */
+  margin: 0.45rem 0 0.85rem;
+  /* Mengatur tampilan `max-width` pada elemen halaman.  */
+  max-width: 14ch;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.hero-lead {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--muted);
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 1rem;
+  /* Mengatur tampilan `line-height` pada elemen halaman.  */
+  line-height: 1.7;
+  /* Mengatur tampilan `max-width` pada elemen halaman.  */
+  max-width: 72ch;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.hero-chip-row {
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: flex;
+  /* Mengatur tampilan `flex-wrap` pada elemen halaman.  */
+  flex-wrap: wrap;
+  /* Mengatur tampilan `gap` pada elemen halaman.  */
+  gap: 0.7rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.hero-chip {
+  /* Mengatur tampilan `border` pada elemen halaman.  */
+  border: 1px solid rgba(31, 111, 95, 0.14);
+  /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+  border-radius: 999px;
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: rgba(255, 255, 255, 0.88);
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--ink);
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: inline-flex;
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 0.9rem;
+  /* Mengatur tampilan `gap` pada elemen halaman.  */
+  gap: 0.35rem;
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 0.72rem 1rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-hero-card {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background:
+    /* Mengatur tampilan visual dashboard.  */
+    linear-gradient(180deg, rgba(15, 79, 66, 0.98), rgba(31, 111, 95, 0.96));
+  /* Mengatur tampilan `border` pada elemen halaman.  */
+  border: 0;
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: #f6fbf8;
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: flex;
+  /* Mengatur tampilan `flex-direction` pada elemen halaman.  */
+  flex-direction: column;
+  /* Mengatur tampilan `gap` pada elemen halaman.  */
+  gap: 1rem;
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 1.4rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-hero-card .section-label {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: rgba(255, 255, 255, 0.72);
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.status-badge {
+  /* Mengatur tampilan `align-self` pada elemen halaman.  */
+  align-self: flex-start;
+  /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+  border-radius: 999px;
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: inline-flex;
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 0.85rem;
+  /* Mengatur tampilan `font-weight` pada elemen halaman.  */
+  font-weight: 700;
+  /* Mengatur tampilan `letter-spacing` pada elemen halaman.  */
+  letter-spacing: 0.02em;
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 0.55rem 0.95rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.status-success {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: rgba(255, 255, 255, 0.14);
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: #ffffff;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.status-warning {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: rgba(255, 204, 102, 0.18);
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: #ffe0ad;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.status-danger {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: rgba(255, 130, 130, 0.18);
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: #ffd1d1;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.status-pending {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: rgba(255, 255, 255, 0.14);
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: rgba(255, 255, 255, 0.84);
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.status-copy {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: rgba(255, 255, 255, 0.82);
+  /* Mengatur tampilan `line-height` pada elemen halaman.  */
+  line-height: 1.7;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.stats-grid {
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: grid;
+  /* Mengatur tampilan `gap` pada elemen halaman.  */
+  gap: 1rem;
+  /* Mengatur tampilan `grid-template-columns` pada elemen halaman.  */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.metric-card {
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 1.25rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.metric-label {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--muted);
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 0.82rem;
+  /* Mengatur tampilan `letter-spacing` pada elemen halaman.  */
+  letter-spacing: 0.08em;
+  /* Mengatur tampilan `margin-bottom` pada elemen halaman.  */
+  margin-bottom: 0.65rem;
+  /* Mengatur tampilan `text-transform` pada elemen halaman.  */
+  text-transform: uppercase;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.metric-value {
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: clamp(1.55rem, 2vw, 2.25rem);
+  /* Mengatur tampilan `font-weight` pada elemen halaman.  */
+  font-weight: 700;
+  /* Mengatur tampilan `letter-spacing` pada elemen halaman.  */
+  letter-spacing: -0.03em;
+  /* Mengatur tampilan `line-height` pada elemen halaman.  */
+  line-height: 1.05;
+  /* Mengatur tampilan `margin-bottom` pada elemen halaman.  */
+  margin-bottom: 0.35rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.metric-value-sm {
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: clamp(1.05rem, 1.4vw, 1.45rem);
+  /* Mengatur tampilan `line-height` pada elemen halaman.  */
+  line-height: 1.25;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan visual dashboard.  */
+.metric-note,
+/* Mengatur tampilan visual dashboard.  */
+.history-summary,
+/* Mengatur tampilan visual dashboard.  */
+.result-meta,
+/* Mengatur tampilan visual dashboard.  */
+.spotlight-meta,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-footer-value {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--muted);
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.section-title {
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 1.35rem;
+  /* Mengatur tampilan `margin` pada elemen halaman.  */
+  margin: 0.15rem 0 0;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.dashboard-card {
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 1.35rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.dashboard-card-accent {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background:
+    /* Mengatur tampilan visual dashboard.  */
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 241, 0.96));
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.card-head {
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: flex;
+  /* Mengatur tampilan `justify-content` pada elemen halaman.  */
+  justify-content: space-between;
+  /* Mengatur tampilan `gap` pada elemen halaman.  */
+  gap: 1rem;
+  /* Mengatur tampilan `margin-bottom` pada elemen halaman.  */
+  margin-bottom: 1rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-grid {
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: grid;
+  /* Mengatur tampilan `gap` pada elemen halaman.  */
+  gap: 0.85rem;
+  /* Mengatur tampilan `grid-template-columns` pada elemen halaman.  */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-item {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: var(--surface-alt);
+  /* Mengatur tampilan `border` pada elemen halaman.  */
+  border: 1px solid var(--line);
+  /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+  border-radius: var(--radius-md);
+  /* Mengatur tampilan `min-height` pada elemen halaman.  */
+  min-height: 92px;
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 0.95rem 1rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-key {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--muted);
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: block;
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 0.84rem;
+  /* Mengatur tampilan `margin-bottom` pada elemen halaman.  */
+  margin-bottom: 0.45rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-value {
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: block;
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 1rem;
+  /* Mengatur tampilan `line-height` pada elemen halaman.  */
+  line-height: 1.5;
+  /* Mengatur tampilan `word-break` pada elemen halaman.  */
+  word-break: break-word;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-footer {
+  /* Mengatur tampilan `border-top` pada elemen halaman.  */
+  border-top: 1px solid var(--line);
+  /* Mengatur tampilan `margin-top` pada elemen halaman.  */
+  margin-top: 1rem;
+  /* Mengatur tampilan `padding-top` pada elemen halaman.  */
+  padding-top: 1rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.runtime-footer-label {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--brand-strong);
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 0.82rem;
+  /* Mengatur tampilan `font-weight` pada elemen halaman.  */
+  font-weight: 600;
+  /* Mengatur tampilan `margin-bottom` pada elemen halaman.  */
+  margin-bottom: 0.35rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.empty-state {
+  /* Mengatur tampilan `align-items` pada elemen halaman.  */
+  align-items: center;
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: linear-gradient(135deg, rgba(31, 111, 95, 0.08), rgba(217, 106, 43, 0.08));
+  /* Mengatur tampilan `border` pada elemen halaman.  */
+  border: 1px dashed var(--line-strong);
+  /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+  border-radius: var(--radius-md);
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--muted);
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: flex;
+  /* Mengatur tampilan `justify-content` pada elemen halaman.  */
+  justify-content: center;
+  /* Mengatur tampilan `min-height` pada elemen halaman.  */
+  min-height: 280px;
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 1.25rem;
+  /* Mengatur tampilan `text-align` pada elemen halaman.  */
+  text-align: center;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan visual dashboard.  */
+.spotlight-grid,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.result-grid {
+  /* Mengatur tampilan `display` pada elemen halaman.  */
+  display: grid;
+  /* Mengatur tampilan `gap` pada elemen halaman.  */
+  gap: 1rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.spotlight-grid {
+  /* Mengatur tampilan `grid-template-columns` pada elemen halaman.  */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Mengatur tampilan `margin-bottom` pada elemen halaman.  */
+  margin-bottom: 1rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.result-grid {
+  /* Mengatur tampilan `grid-template-columns` pada elemen halaman.  */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan visual dashboard.  */
+.spotlight-visual,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.result-panel {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: var(--surface-alt);
+  /* Mengatur tampilan `border` pada elemen halaman.  */
+  border: 1px solid var(--line);
+  /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+  border-radius: var(--radius-md);
+  /* Mengatur tampilan `overflow` pada elemen halaman.  */
+  overflow: hidden;
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 0.85rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan visual dashboard.  */
+.spotlight-caption,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.result-caption {
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--muted);
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 0.85rem;
+  /* Mengatur tampilan `margin-bottom` pada elemen halaman.  */
+  margin-bottom: 0.65rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan visual dashboard.  */
+.spotlight-image,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.result-image {
+  /* Mengatur tampilan `aspect-ratio` pada elemen halaman.  */
+  aspect-ratio: 1 / 1;
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: linear-gradient(180deg, #f1f5f4, #fafcfb);
+  /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+  border-radius: var(--radius-sm);
+  /* Mengatur tampilan `object-fit` pada elemen halaman.  */
+  object-fit: contain;
+  /* Mengatur tampilan `width` pada elemen halaman.  */
+  width: 100%;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.spotlight-title {
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 1.1rem;
+  /* Mengatur tampilan `margin` pada elemen halaman.  */
+  margin: 0 0 0.4rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.spotlight-meta-wrap {
+  /* Mengatur tampilan `border-top` pada elemen halaman.  */
+  border-top: 1px solid var(--line);
+  /* Mengatur tampilan `padding-top` pada elemen halaman.  */
+  padding-top: 1rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.result-output-list {
+  /* Mengatur tampilan `border-top` pada elemen halaman.  */
+  border-top: 1px solid var(--line);
+  /* Mengatur tampilan `padding-top` pada elemen halaman.  */
+  padding-top: 1rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.dashboard-button {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+  /* Mengatur tampilan `border` pada elemen halaman.  */
+  border: 0;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan `.dashboard-button` pada elemen halaman.  */
+.dashboard-button:hover,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.dashboard-button:focus {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: linear-gradient(135deg, var(--brand-strong), #0b3f35);
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.history-head {
+  /* Mengatur tampilan `align-items` pada elemen halaman.  */
+  align-items: flex-start;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.history-table thead th {
+  /* Mengatur tampilan `border-bottom-width` pada elemen halaman.  */
+  border-bottom-width: 1px;
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--muted);
+  /* Mengatur tampilan `font-size` pada elemen halaman.  */
+  font-size: 0.82rem;
+  /* Mengatur tampilan `font-weight` pada elemen halaman.  */
+  font-weight: 700;
+  /* Mengatur tampilan `letter-spacing` pada elemen halaman.  */
+  letter-spacing: 0.06em;
+  /* Mengatur tampilan `text-transform` pada elemen halaman.  */
+  text-transform: uppercase;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.history-table tbody td {
+  /* Mengatur tampilan `border-color` pada elemen halaman.  */
+  border-color: rgba(24, 49, 42, 0.08);
+  /* Mengatur tampilan `padding-block` pada elemen halaman.  */
+  padding-block: 0.85rem;
+  /* Mengatur tampilan `vertical-align` pada elemen halaman.  */
+  vertical-align: middle;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+code {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: rgba(31, 111, 95, 0.08);
+  /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+  border-radius: 8px;
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--brand-strong);
+  /* Mengatur tampilan `padding` pada elemen halaman.  */
+  padding: 0.1rem 0.35rem;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan visual dashboard.  */
+.form-control,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.form-select {
+  /* Mengatur tampilan `border-color` pada elemen halaman.  */
+  border-color: rgba(24, 49, 42, 0.18);
+  /* Mengatur tampilan `min-height` pada elemen halaman.  */
+  min-height: 48px;
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan `.form-control` pada elemen halaman.  */
+.form-control:focus,
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.form-select:focus {
+  /* Mengatur tampilan `border-color` pada elemen halaman.  */
+  border-color: rgba(31, 111, 95, 0.45);
+  /* Mengatur tampilan `box-shadow` pada elemen halaman.  */
+  box-shadow: 0 0 0 0.18rem rgba(31, 111, 95, 0.15);
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.btn-outline-primary {
+  /* Mengatur tampilan `border-color` pada elemen halaman.  */
+  border-color: rgba(31, 111, 95, 0.4);
+  /* Mengatur tampilan `color` pada elemen halaman.  */
+  color: var(--brand-strong);
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Memulai pengaturan tampilan untuk elemen tertentu.  */
+.btn-outline-primary:hover {
+  /* Mengatur tampilan `background` pada elemen halaman.  */
+  background: var(--brand);
+  /* Mengatur tampilan `border-color` pada elemen halaman.  */
+  border-color: var(--brand);
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan agar tetap rapi di ukuran layar tertentu.  */
+@media (max-width: 1200px) {
+  /* Memulai pengaturan tampilan untuk elemen tertentu.  */
+  .stats-grid {
+    /* Mengatur tampilan `grid-template-columns` pada elemen halaman.  */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Menutup bagian pengaturan tampilan.  */
+  }
+
+  /* Memulai pengaturan tampilan untuk elemen tertentu.  */
+  .result-grid {
+    /* Mengatur tampilan `grid-template-columns` pada elemen halaman.  */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Menutup bagian pengaturan tampilan.  */
+  }
+/* Menutup bagian pengaturan tampilan.  */
+}
+
+/* Mengatur tampilan agar tetap rapi di ukuran layar tertentu.  */
+@media (max-width: 767.98px) {
+  /* Mengatur tampilan visual dashboard.  */
+  .hero-panel,
+  /* Memulai pengaturan tampilan untuk elemen tertentu.  */
+  .dashboard-card {
+    /* Mengatur tampilan `border-radius` pada elemen halaman.  */
+    border-radius: 20px;
+    /* Mengatur tampilan `padding` pada elemen halaman.  */
+    padding: 1rem;
+  /* Menutup bagian pengaturan tampilan.  */
+  }
+
+  /* Memulai pengaturan tampilan untuk elemen tertentu.  */
+  .hero-title {
+    /* Mengatur tampilan `max-width` pada elemen halaman.  */
+    max-width: none;
+  /* Menutup bagian pengaturan tampilan.  */
+  }
+
+  /* Mengatur tampilan visual dashboard.  */
+  .stats-grid,
+  /* Mengatur tampilan visual dashboard.  */
+  .runtime-grid,
+  /* Mengatur tampilan visual dashboard.  */
+  .spotlight-grid,
+  /* Memulai pengaturan tampilan untuk elemen tertentu.  */
+  .result-grid {
+    /* Mengatur tampilan `grid-template-columns` pada elemen halaman.  */
+    grid-template-columns: 1fr;
+  /* Menutup bagian pengaturan tampilan.  */
+  }
+
+  /* Memulai pengaturan tampilan untuk elemen tertentu.  */
+  .card-head {
+    /* Mengatur tampilan `flex-direction` pada elemen halaman.  */
+    flex-direction: column;
+    /* Mengatur tampilan `align-items` pada elemen halaman.  */
+    align-items: stretch;
+  /* Menutup bagian pengaturan tampilan.  */
+  }
+
+  /* Memulai pengaturan tampilan untuk elemen tertentu.  */
+  .history-table {
+    /* Mengatur tampilan `min-width` pada elemen halaman.  */
+    min-width: 720px;
+  /* Menutup bagian pengaturan tampilan.  */
+  }
+/* Menutup bagian pengaturan tampilan.  */
+}

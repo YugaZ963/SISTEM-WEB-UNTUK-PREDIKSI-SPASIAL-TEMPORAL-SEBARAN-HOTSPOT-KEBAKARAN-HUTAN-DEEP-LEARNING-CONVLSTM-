@@ -1,0 +1,22 @@
+{
+  "mode": "preview_multiscale",
+  "source_image": "C:\\laragon\\www\\sistem-web-skripsi-ta\\Ipynb\\Dataset History Fire Hotspot In Riau Province PNG\\FIRMS_2025-08-22[@102.1,0.8,8.1z].png",
+  "patch_size": 224,
+  "context_size": 448,
+  "context_scale": 2.0,
+  "multiscale_tensor_shape": [
+    224,
+    224,
+    2
+  ],
+  "meaning": {
+    "channel_0": "mask hotspot lokal untuk detail",
+    "channel_1": "mask hotspot konteks lebih luas yang di-resize ke ukuran patch"
+  },
+  "outputs": {
+    "local_mask": "C:\\laragon\\www\\sistem-web-skripsi-ta\\artifacts\\experiments\\historical_risk_patch_improvements\\multiscale_local_mask_224.png",
+    "context_mask": "C:\\laragon\\www\\sistem-web-skripsi-ta\\artifacts\\experiments\\historical_risk_patch_improvements\\multiscale_context_mask_224_scale_2.0.png",
+    "two_channel_preview": "C:\\laragon\\www\\sistem-web-skripsi-ta\\artifacts\\experiments\\historical_risk_patch_improvements\\multiscale_two_channel_preview_224.png",
+    "composite": "C:\\laragon\\www\\sistem-web-skripsi-ta\\artifacts\\experiments\\historical_risk_patch_improvements\\multiscale_patch_preview_224.png"
+  }
+}
